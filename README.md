@@ -1,0 +1,3 @@
+# 🚀 AI Life Assistant
+
+Upload any photo or video and get intelligent insights...
