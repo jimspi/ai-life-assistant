@@ -156,135 +156,149 @@ export default function AILifeAssistant() {
 
   if (status === 'loading') {
     return (
-      
-        
-          
-          Loading...
-        
-      
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <Brain className="w-12 h-12 text-purple-600 animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
     );
   }
 
   if (!session) {
     return (
-      
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-purple-50">
+        <Head>
+          <title>AI Life Assistant - Smart Insights for Every Aspect of Life</title>
+          <meta name="description" content="Upload photos and videos to get personalized AI insights for home, health, productivity, and more." />
+        </Head>
         
-          AI Life Assistant - Smart Insights for Every Aspect of Life
-          
-        
-        
-        
-          
-            
-              
-                
-              
-              
+        <div className="container mx-auto px-4 py-16">
+          <div className="text-center max-w-4xl mx-auto">
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <div className="p-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl">
+                <Brain className="w-12 h-12 text-white" />
+              </div>
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
                 AI Life Assistant
-              
+              </h1>
+            </div>
             
-            
-            
+            <p className="text-2xl text-gray-600 mb-12 leading-relaxed">
               Upload any photo or video and get intelligent insights, actionable recommendations, 
               and personalized suggestions for every aspect of your life
-            
+            </p>
 
-            
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              <div className="bg-white rounded-2xl p-8 shadow-lg">
+                <Upload className="w-12 h-12 text-purple-600 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-3">Upload Anything</h3>
+                <p className="text-gray-600">Photos of your space, food, projects, or any life situation</p>
+              </div>
               
-                
-                Upload Anything
-                Photos of your space, food, projects, or any life situation
+              <div className="bg-white rounded-2xl p-8 shadow-lg">
+                <Brain className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-3">AI Analysis</h3>
+                <p className="text-gray-600">Smart insights tailored to your lifestyle, budget, and goals</p>
+              </div>
               
-              
-              
-                
-                AI Analysis
-                Smart insights tailored to your lifestyle, budget, and goals
-              
-              
-              
-                
-                Take Action
-                Prioritized steps, cost breakdowns, and personalized recommendations
-              
-            
+              <div className="bg-white rounded-2xl p-8 shadow-lg">
+                <Target className="w-12 h-12 text-green-600 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-3">Take Action</h3>
+                <p className="text-gray-600">Prioritized steps, cost breakdowns, and personalized recommendations</p>
+              </div>
+            </div>
 
             <button
               onClick={() => signIn('google')}
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white text-xl px-12 py-4 rounded-xl font-semibold transition-all duration-200 shadow-xl hover:shadow-2xl transform hover:scale-105"
             >
               Get Started with Google
-            
+            </button>
 
-            Free to start • Secure • No spam
-          
-        
-      
+            <p className="text-gray-500 mt-6">Free to start • Secure • No spam</p>
+          </div>
+        </div>
+      </div>
     );
   }
 
   return (
-    
-      
-        AI Life Assistant Dashboard
-      
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-purple-50">
+      <Head>
+        <title>AI Life Assistant Dashboard</title>
+      </Head>
 
-      
-        
-          
+      <header className="bg-white shadow-sm border-b">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Brain className="w-8 h-8 text-purple-600" />
+              <h1 className="text-2xl font-bold text-gray-800">AI Life Assistant</h1>
+            </div>
             
-              
-              AI Life Assistant
-            
-            
-            
+            <div className="flex items-center gap-4">
               {session.user.image && (
-                
+                <img 
+                  src={session.user.image} 
+                  alt="Profile" 
+                  className="w-8 h-8 rounded-full"
+                />
               )}
-              {session.user.name}
+              <span className="text-gray-700">{session.user.name}</span>
               <button
                 onClick={() => signOut()}
                 className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors"
               >
-                
+                <LogOut className="w-4 h-4" />
                 Sign Out
-              
-            
-          
-        
-      
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
 
       {showOnboarding && (
-        
+        <OnboardingFlow 
+          onComplete={completeOnboarding}
+          userInfo={{
+            name: session.user.name?.split(' ')[0],
+            email: session.user.email
+          }}
+        />
       )}
 
       {!showOnboarding && userProfile && (
-        
-          
-            
-              
+        <main className="container mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-1">
+              <div className="sticky top-8 space-y-6">
                 <UserProfileCard 
                   profile={userProfile} 
                   onEdit={() => setShowOnboarding(true)} 
                 />
                 
-                
+                <UploadZone 
+                  onUpload={handleFileUpload}
+                  analyzing={analyzing}
+                  fileInputRef={fileInputRef}
+                />
 
                 {uploads.length > 0 && (
-                  
+                  <AnalysisHistory uploads={uploads.slice(0, 5)} />
                 )}
-              
-            
+              </div>
+            </div>
 
-            
+            <div className="lg:col-span-2">
               {uploads.length === 0 ? (
-                
+                <EmptyState />
               ) : (
-                
-                  
-                    
-                    Your AI Insights
-                  
+                <div className="space-y-6">
+                  <div className="flex items-center gap-2 mb-6">
+                    <Zap className="w-6 h-6 text-purple-600" />
+                    <h2 className="text-2xl font-bold text-gray-800">Your AI Insights</h2>
+                  </div>
                   
                   {uploads.map(upload => (
                     <AnalysisCard 
@@ -293,82 +307,85 @@ export default function AILifeAssistant() {
                       onFeedback={(feedback) => submitFeedback(upload.id, feedback)}
                     />
                   ))}
-                
+                </div>
               )}
-            
-          
-        
+            </div>
+          </div>
+        </main>
       )}
-    
+    </div>
   );
 }
 
 const UserProfileCard = ({ profile, onEdit }) => (
-  
-    
-      Your Profile
-      
+  <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+    <div className="flex items-center justify-between mb-4">
+      <h3 className="font-semibold text-gray-800">Your Profile</h3>
+      <button 
+        onClick={onEdit}
+        className="text-sm text-purple-600 hover:text-purple-700"
+      >
         Edit
-      
+      </button>
+    </div>
     
-    
-    
-      
-        Name:
-        {profile.name}
-      
-      
-        Lifestyle:
-        {profile.lifestyle?.replace('_', ' ')}
-      
-      
-        Budget:
-        {profile.budget}
-      
-      
-        Location:
-        {profile.location}
-      
-      
-        Focus Areas:
-        
+    <div className="space-y-3 text-sm">
+      <div>
+        <span className="text-gray-600">Name:</span>
+        <span className="ml-2 text-gray-800">{profile.name}</span>
+      </div>
+      <div>
+        <span className="text-gray-600">Lifestyle:</span>
+        <span className="ml-2 text-gray-800 capitalize">{profile.lifestyle?.replace('_', ' ')}</span>
+      </div>
+      <div>
+        <span className="text-gray-600">Budget:</span>
+        <span className="ml-2 text-gray-800 capitalize">{profile.budget}</span>
+      </div>
+      <div>
+        <span className="text-gray-600">Location:</span>
+        <span className="ml-2 text-gray-800">{profile.location}</span>
+      </div>
+      <div>
+        <span className="text-gray-600">Focus Areas:</span>
+        <div className="flex flex-wrap gap-1 mt-1">
           {(profile.goals || []).map((goal, index) => (
-            
+            <span key={index} className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">
               {goal.replace('_', ' ')}
-            
+            </span>
           ))}
-        
-      
-    
-  
+        </div>
+      </div>
+    </div>
+  </div>
 );
 
 const UploadZone = ({ onUpload, analyzing, fileInputRef }) => (
-  
-    
-      
+  <div className="border-2 border-dashed border-purple-300 rounded-xl p-8 text-center bg-gradient-to-br from-purple-50 to-blue-50 hover:from-purple-100 hover:to-blue-100 transition-all duration-300">
+    <div className="flex flex-col items-center gap-4">
+      <div className="p-4 bg-purple-100 rounded-full">
         {analyzing ? (
-          
+          <Clock className="w-8 h-8 text-purple-600 animate-spin" />
         ) : (
-          
+          <Upload className="w-8 h-8 text-purple-600" />
         )}
-      
-      
-        
+      </div>
+      <div>
+        <h3 className="text-xl font-semibold text-gray-800 mb-2">
           {analyzing ? 'AI Analyzing...' : 'Upload Photo or Video'}
-        
-        
+        </h3>
+        <p className="text-gray-600 mb-4">
           {analyzing ? 'Getting personalized insights' : 'Get smart insights for any life situation'}
-        
+        </p>
         <button
           onClick={() => fileInputRef.current?.click()}
           disabled={analyzing}
           className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {analyzing ? 'Processing...' : 'Choose Files'}
-        
-      
-    
+        </button>
+      </div>
+    </div>
     <input
       ref={fileInputRef}
       type="file"
@@ -377,64 +394,64 @@ const UploadZone = ({ onUpload, analyzing, fileInputRef }) => (
       onChange={(e) => onUpload(e.target.files)}
       className="hidden"
     />
-  
+  </div>
 );
 
 const AnalysisHistory = ({ uploads }) => (
-  
-    Recent Analysis
-    
+  <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+    <h3 className="font-semibold text-gray-800 mb-4">Recent Analysis</h3>
+    <div className="space-y-3">
       {uploads.map(upload => (
-        
-          
+        <div key={upload.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+          <div className="w-10 h-10 rounded bg-gray-200 flex items-center justify-center">
             {upload.fileName?.includes('video') ? (
-              
+              <Video className="w-4 h-4 text-gray-500" />
             ) : (
-              
+              <Camera className="w-4 h-4 text-gray-500" />
             )}
-          
-          
-            
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="font-medium text-gray-800 truncate">
               {upload.analysis?.name || upload.fileName}
-            
-            
+            </div>
+            <div className="text-sm text-gray-500">
               {upload.timestamp?.toDate?.()?.toLocaleDateString() || 'Recently'}
-            
-          
-          
-        
+            </div>
+          </div>
+          <CheckCircle className="w-4 h-4 text-green-500" />
+        </div>
       ))}
-    
-  
+    </div>
+  </div>
 );
 
 const EmptyState = () => (
-  
-    
-      
-    
-    Ready to Get Smart Insights
-    
+  <div className="text-center py-16">
+    <div className="w-24 h-24 bg-gradient-to-br from-purple-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+      <Brain className="w-12 h-12 text-purple-600" />
+    </div>
+    <h3 className="text-2xl font-semibold text-gray-600 mb-4">Ready to Get Smart Insights</h3>
+    <p className="text-gray-500 max-w-md mx-auto mb-8">
       Upload your first photo or video to see how AI can help optimize any aspect of your life
-    
-    
-      
-        
-        Home & Organization
-        Space optimization, decluttering, design tips
-      
-      
-        
-        Health & Fitness
-        Workout planning, nutrition analysis, wellness
-      
-      
-        
-        Food & Cooking
-        Meal planning, recipe suggestions, nutrition
-      
-    
-  
+    </p>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+      <div className="bg-white rounded-xl p-6 shadow-md">
+        <Home className="w-8 h-8 text-blue-600 mx-auto mb-3" />
+        <h4 className="font-semibold mb-2">Home & Organization</h4>
+        <p className="text-sm text-gray-600">Space optimization, decluttering, design tips</p>
+      </div>
+      <div className="bg-white rounded-xl p-6 shadow-md">
+        <Heart className="w-8 h-8 text-red-600 mx-auto mb-3" />
+        <h4 className="font-semibold mb-2">Health & Fitness</h4>
+        <p className="text-sm text-gray-600">Workout planning, nutrition analysis, wellness</p>
+      </div>
+      <div className="bg-white rounded-xl p-6 shadow-md">
+        <Utensils className="w-8 h-8 text-green-600 mx-auto mb-3" />
+        <h4 className="font-semibold mb-2">Food & Cooking</h4>
+        <p className="text-sm text-gray-600">Meal planning, recipe suggestions, nutrition</p>
+      </div>
+    </div>
+  </div>
 );
 
 const AnalysisCard = ({ upload, onFeedback }) => {
@@ -443,72 +460,72 @@ const AnalysisCard = ({ upload, onFeedback }) => {
   const { analysis } = upload;
 
   return (
-    
-      
-        
+    <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+      <div className="p-6">
+        <div className="flex items-start gap-4 mb-6">
           {upload.fileUrl && (
-            
-              
-            
+            <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
+              <img src={upload.fileUrl} alt="Upload" className="w-full h-full object-cover" />
+            </div>
           )}
-          
-            
-              
-                
-              
-              
-                {analysis.name}
-                {analysis.category}
-              
-              
-                
-                  
-                  AI Analysis
-                
-              
-            
-            {analysis.summary}
-          
-        
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2 rounded-lg bg-blue-100">
+                <Brain className="w-5 h-5 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800">{analysis.name}</h3>
+                <p className="text-sm text-gray-500">{analysis.category}</p>
+              </div>
+              <div className="ml-auto">
+                <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">
+                  <Brain className="w-3 h-3" />
+                  <span>AI Analysis</span>
+                </div>
+              </div>
+            </div>
+            <p className="text-gray-700">{analysis.summary}</p>
+          </div>
+        </div>
 
         {analysis.insights && (
-          
-            
-              
-              Key Insights
-            
-            
+          <div className="mb-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Lightbulb className="w-5 h-5 text-purple-600" />
+              <h4 className="font-semibold text-gray-800">Key Insights</h4>
+            </div>
+            <div className="space-y-3">
               {analysis.insights.map((insight, index) => (
-                
-                  
-                  {insight}
-                
+                <div key={index} className="flex items-start gap-3 p-3 bg-purple-50 rounded-lg">
+                  <CheckCircle className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                  <span className="text-sm text-gray-700">{insight}</span>
+                </div>
               ))}
-            
-          
+            </div>
+          </div>
         )}
 
         {analysis.actionItems && (
-          
-            
-              
-              Recommended Actions
-            
-            
+          <div className="mb-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Target className="w-5 h-5 text-green-600" />
+              <h4 className="font-semibold text-gray-800">Recommended Actions</h4>
+            </div>
+            <div className="space-y-4">
               {analysis.actionItems.map((action, index) => (
-                
-                  
-                    
-                    
-                      {action.text}
+                <div key={index} className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <ArrowRight className="w-5 h-5 text-gray-600 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-800 mb-1">{action.text}</div>
                       {action.whyRecommended && (
-                        {action.whyRecommended}
+                        <div className="text-sm text-gray-600 mb-2">{action.whyRecommended}</div>
                       )}
                       {action.costBreakdown && (
-                        {action.costBreakdown}
+                        <div className="text-sm text-green-700 font-medium">{action.costBreakdown}</div>
                       )}
-                    
-                    
+                    </div>
+                    <div className="flex flex-col items-end gap-1">
                       {action.priority && (
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                           action.priority === 'high' ? 'bg-red-100 text-red-700' :
@@ -516,65 +533,68 @@ const AnalysisCard = ({ upload, onFeedback }) => {
                           'bg-green-100 text-green-700'
                         }`}>
                           {action.priority}
-                        
+                        </span>
                       )}
                       {action.timeEstimate && (
-                        {action.timeEstimate}
+                        <span className="text-xs text-gray-500">{action.timeEstimate}</span>
                       )}
-                    
-                  
-                
+                    </div>
+                  </div>
+                </div>
               ))}
-            
-          
+            </div>
+          </div>
         )}
 
         {analysis.suggestions && (
-          
-            
-              
-              Additional Suggestions
-            
-            
+          <div className="mb-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Star className="w-5 h-5 text-yellow-500" />
+              <h4 className="font-semibold text-gray-800">Additional Suggestions</h4>
+            </div>
+            <div className="flex flex-wrap gap-2">
               {analysis.suggestions.map((suggestion, index) => (
-                
+                <span
+                  key={index}
+                  className="px-3 py-1 bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-full text-sm"
+                >
                   {suggestion}
-                
+                </span>
               ))}
-            
-          
+            </div>
+          </div>
         )}
 
         {!upload.userFeedback && (
-          
-            Was this analysis helpful?
-            
+          <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+            <span className="text-sm text-gray-600">Was this analysis helpful?</span>
+            <div className="flex gap-2">
               <button
                 onClick={() => onFeedback('helpful')}
                 className="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-sm hover:bg-green-200 transition-colors"
               >
                 👍 Yes
-              
+              </button>
               <button
                 onClick={() => onFeedback('not_helpful')}
                 className="px-3 py-1 bg-red-100 text-red-700 rounded-lg text-sm hover:bg-red-200 transition-colors"
               >
                 👎 No
-              
-            
-          
+              </button>
+            </div>
+          </div>
         )}
 
         {upload.userFeedback && (
-          
-            
+          <div className="pt-4 border-t border-gray-200">
+            <span className="text-sm text-gray-500">
               Thanks for your feedback! 
               {upload.userFeedback === 'helpful' ? ' 👍' : ' 👎'}
-            
-          
+            </span>
+          </div>
         )}
-      
-    
+      </div>
+    </div>
   );
 };
 
@@ -716,35 +736,35 @@ const OnboardingFlow = ({ onComplete, userInfo }) => {
   };
 
   return (
-    
-      
-        
-          
-            
-              Step {currentStep + 1} of {questions.length}
-              {Math.round(((currentStep + 1) / questions.length) * 100)}%
-            
-            
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="p-8">
+          <div className="mb-8">
+            <div className="flex justify-between text-sm text-gray-500 mb-2">
+              <span>Step {currentStep + 1} of {questions.length}</span>
+              <span>{Math.round(((currentStep + 1) / questions.length) * 100)}%</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2">
               <div 
                 className="bg-gradient-to-r from-purple-600 to-blue-600 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${((currentStep + 1) / questions.length) * 100}%` }}
-              >
-            
-          
+              ></div>
+            </div>
+          </div>
 
-          
-            {currentQuestion.title}
-            {currentQuestion.subtitle}
-          
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-3">{currentQuestion.title}</h2>
+            <p className="text-gray-600">{currentQuestion.subtitle}</p>
+          </div>
 
-          
+          <div className="mb-8">
             {currentQuestion.type === 'intro' && (
-              
-                
-                  
-                
-                Let's get started!
-              
+              <div className="text-center py-8">
+                <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Brain className="w-10 h-10 text-purple-600" />
+                </div>
+                <p className="text-lg text-gray-700">Let's get started!</p>
+              </div>
             )}
 
             {currentQuestion.type === 'text' && (
@@ -759,7 +779,7 @@ const OnboardingFlow = ({ onComplete, userInfo }) => {
             )}
 
             {currentQuestion.type === 'select' && (
-              
+              <div className="space-y-3">
                 {currentQuestion.options.map((option) => (
                   <button
                     key={option.value}
@@ -771,13 +791,13 @@ const OnboardingFlow = ({ onComplete, userInfo }) => {
                     }`}
                   >
                     {option.label}
-                  
+                  </button>
                 ))}
-              
+              </div>
             )}
 
             {currentQuestion.type === 'multi-select' && (
-              
+              <div className="space-y-3">
                 {currentQuestion.options.map((option) => (
                   <button
                     key={option.value}
@@ -788,21 +808,25 @@ const OnboardingFlow = ({ onComplete, userInfo }) => {
                         : 'border-gray-300 hover:border-gray-400'
                     }`}
                   >
-                    
-                      
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                        selectedGoals.includes(option.value)
+                          ? 'border-purple-500 bg-purple-500'
+                          : 'border-gray-300'
+                      }`}>
                         {selectedGoals.includes(option.value) && (
-                          
+                          <CheckCircle className="w-3 h-3 text-white" />
                         )}
-                      
-                      {option.label}
-                    
-                  
+                      </div>
+                      <span>{option.label}</span>
+                    </div>
+                  </button>
                 ))}
-              
+              </div>
             )}
-          
+          </div>
 
-          
+          <div className="flex justify-between">
             <button
               onClick={handleBack}
               className={`px-6 py-3 rounded-lg transition-colors ${
@@ -813,14 +837,22 @@ const OnboardingFlow = ({ onComplete, userInfo }) => {
               disabled={currentStep === 0}
             >
               Back
+            </button>
             
-            
-            
+            <button
+              onClick={handleNext}
+              disabled={!canProceed()}
+              className={`px-8 py-3 rounded-lg font-medium transition-all ${
+                canProceed()
+                  ? 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
               {currentStep === questions.length - 1 ? 'Complete Setup' : 'Next'}
-            
-          
-        
-      
-    
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
