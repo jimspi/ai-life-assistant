@@ -8,6 +8,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background: #f8fafc;
 }
 
 a {
@@ -19,16 +20,16 @@ a {
   box-sizing: border-box;
 }
 
-/* Temporarily disable dark mode */
-/* @media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
-} */
+/* Force light mode */
+html {
+  color-scheme: light;
+}
+
+body {
+  color: #1f2937;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3e8ff 100%);
+  min-height: 100vh;
+}
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
@@ -68,4 +69,25 @@ a {
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+}
+
+/* Ensure purple colors work */
+.text-purple-600 {
+  color: #9333ea !important;
+}
+
+.bg-purple-600 {
+  background-color: #9333ea !important;
+}
+
+.bg-purple-100 {
+  background-color: #f3e8ff !important;
+}
+
+.text-blue-600 {
+  color: #2563eb !important;
+}
+
+.bg-blue-600 {
+  background-color: #2563eb !important;
 }
